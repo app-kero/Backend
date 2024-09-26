@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.appkero.backend_kero.entities.Usuario;
+import com.appkero.backend_kero.entities.DTOs.UsuarioRequest;
 import com.appkero.backend_kero.services.UsuarioService;
 
 @RestController
@@ -23,8 +24,13 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> insert(@RequestBody Usuario usuario) {
-        Usuario usuarioDB = this.usuarioService.insert(usuario);
+    public ResponseEntity<Usuario> insert(@RequestBody UsuarioRequest usuario) {
+        Usuario usuarioDB = new Usuario();
+        usuarioDB.setNome(usuario.nome());
+        usuarioDB.setSobrenome(usuario.sobrenome());
+        usuarioDB.setTelefone(usuario.telefone());
+        usuarioDB.setEmail(usuario.email());
+        this.usuarioService.insert(usuarioDB);
         return ResponseEntity.ok(usuarioDB);
     }
 

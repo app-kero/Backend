@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/kero
-    username: #usuario
-    password: #senha
+    username: postgres
+    password: 1
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -12,3 +12,7 @@ spring:
   sql:
     init:
       mode: always
+  flyway:
+    enabled: true
+    baseline-on-migrate: true 
+    locations: classpath:db/migration   
