@@ -2,11 +2,11 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:13
+    image: postgres:11
     container_name: postgres_kero
     environment:
-      POSTGRES_USER: #usuario
-      POSTGRES_PASSWORD: #senha
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1
       POSTGRES_DB: postgres
     volumes:
       - postgres-data:/var/lib/postgresql/data
@@ -17,8 +17,8 @@ services:
     image: dpage/pgadmin4
     container_name: pgadmin_kero
     environment:
-      PGADMIN_DEFAULT_EMAIL: #email
-      PGADMIN_DEFAULT_PASSWORD: #senha
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
     ports:
       - "8081:80"
     depends_on:
