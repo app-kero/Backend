@@ -1,5 +1,7 @@
 package com.appkero.backend_kero.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
@@ -28,7 +30,8 @@ public class Endereco extends BasicEntity {
     @NotBlank(message = "O campo estado não pode ser vazio")
     private String estado;
 
-    @OneToOne(mappedBy = "endereco", cascade = CascadeType.ALL) // Um endereço é associado a um único usuário
+    @OneToOne(mappedBy = "endereco", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Usuario usuario;
 
     public String getEnderecoCompleto() {

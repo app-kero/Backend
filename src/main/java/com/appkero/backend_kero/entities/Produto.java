@@ -2,6 +2,8 @@ package com.appkero.backend_kero.entities;
 
 import java.time.LocalTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -29,6 +31,7 @@ public class Produto extends BasicEntity {
     private LocalTime horario;
 
     @ManyToOne 
+    @JsonIgnore
     @JoinColumn(name = "usuario_id", nullable = false) 
     private Usuario usuario;
 
