@@ -1,18 +1,27 @@
 package com.appkero.backend_kero.security.authentication;
 
+import com.appkero.backend_kero.entities.PasswordResetToken;
+import com.appkero.backend_kero.entities.Usuario;
+import com.appkero.backend_kero.repositories.PasswordResetTokenRepository;
 import com.appkero.backend_kero.security.userdetails.UserDetailsImpl;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 @Service
 public class JwtTokenService {
+
+    @Autowired
+    private PasswordResetTokenRepository passwordResetTokenRepository;
 
     private static final String SECRET_KEY = "4Z^XrroxR@dWxqf$mTTKwW$!@#qGr4P"; // Chave secreta utilizada para gerar e verificar o token
 
@@ -53,6 +62,12 @@ public class JwtTokenService {
 
     private Instant expirationDate() {
         return ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")).plusHours(4).toInstant();
+    }
+
+    public String generatePasswordResetToken(Usuario user) {
+        String token = UUID.randomUUID().toString();
+        PasswordResetToken passwordResetToken = PasswordResetToken.builder().token(token).usuario(user).build();
+        return token;
     }
 
 }

@@ -86,4 +86,9 @@ public class UsuarioService {
         return new RecoveryJwtTokenDTO(jwtTokenService.generateToken(userDetails));
     }
 
+    public void sendRecoveryEmail(String email) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'sendRecoveryEmail'");
+    }
+
 }
