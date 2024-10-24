@@ -5,7 +5,11 @@ import org.springframework.stereotype.Repository;
 
 import com.appkero.backend_kero.entities.Usuario;
 
+import java.util.*;
+
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
     
+    Optional<Usuario> findByEmail(String email);
+
 }
