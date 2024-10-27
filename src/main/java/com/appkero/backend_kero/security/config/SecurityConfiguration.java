@@ -26,7 +26,8 @@ public class SecurityConfiguration {
             "/api/usuario/login", // url que usaremos para fazer login
             "/api/usuario", // url que usaremos para criar um usuário
             "/swagger-ui/*",
-            "/api/auth/*"
+            "/api/auth/recover-password",
+            "/api/auth/reset-password"
     };
 
     // Endpoints que requerem autenticação para serem acessados

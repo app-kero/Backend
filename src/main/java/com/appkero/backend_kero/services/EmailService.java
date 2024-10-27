@@ -13,6 +13,7 @@ public class EmailService {
 
     public void sendPasswordResetEmail(String email, String token) {
         SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("noreply@mail.com");
         message.setTo(email);
         message.setSubject("Email de Recuperação de Senha");
         message.setText("Utilize o link a seguir para recuperar seu acesso: http://localhost:8080/api/auth/reset-password?token="+token);
