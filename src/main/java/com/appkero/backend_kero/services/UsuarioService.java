@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.appkero.backend_kero.entities.Arquivo;
 import com.appkero.backend_kero.entities.Endereco;
 import com.appkero.backend_kero.entities.Role;
 import com.appkero.backend_kero.entities.Usuario;
@@ -51,7 +52,7 @@ public class UsuarioService {
         return this.usuarioRepository.findAll();
     }
 
-    public Usuario insert(UsuarioRequest dto) {
+    public Usuario insert(UsuarioRequest dto, Arquivo fotoperfil) {
         Usuario user = Usuario.builder()
             .nome(dto.nome())
             .sobrenome(dto.sobrenome())
@@ -59,6 +60,7 @@ public class UsuarioService {
             .telefone(dto.telefone())
             .password(securityConfiguration.passwordEncoder().encode(dto.password()))
             .roles(List.of(Role.builder().name(dto.role()).build()))
+            .fotoPerfil(fotoperfil)
             .build();
         
         return usuarioRepository.save(user);

@@ -2,6 +2,9 @@ package com.appkero.backend_kero.entities;
 
 import java.util.List;
 
+import com.appkero.backend_kero.utils.ArquivoToArquivoResponseConverter;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -56,6 +59,11 @@ public class Usuario extends BasicEntity {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name="role_id"))
     private List<Role> roles;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "foto_perfil_id")
+    @JsonSerialize(using = ArquivoToArquivoResponseConverter.class)
+    private Arquivo fotoPerfil;
 
     public String getNomeCompleto() {
         return this.nome + " " + this.sobrenome;

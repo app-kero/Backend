@@ -4,7 +4,9 @@ import com.appkero.backend_kero.enums.RoleName;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 
+@Builder
 public record UsuarioRequest(
     @NotBlank String nome,
     @NotBlank String sobrenome,
