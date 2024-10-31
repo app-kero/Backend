@@ -2,8 +2,8 @@ package com.appkero.backend_kero.services;
 
 import org.springframework.stereotype.Service;
 
-import com.appkero.backend_kero.entities.Endereco;
-import com.appkero.backend_kero.entities.DTOs.EnderecoRequest;
+import com.appkero.backend_kero.domain.endereco.Endereco;
+import com.appkero.backend_kero.domain.endereco.EnderecoRequest;
 import com.appkero.backend_kero.repositories.EnderecoRepository;
 
 @Service

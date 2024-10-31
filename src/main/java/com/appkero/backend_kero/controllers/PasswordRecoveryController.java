@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.appkero.backend_kero.entities.DTOs.PasswordRecoveryRequest;
-import com.appkero.backend_kero.entities.DTOs.PasswordResetRequest;
+import com.appkero.backend_kero.controllers.DTOs.PasswordRecoveryRequest;
+import com.appkero.backend_kero.controllers.DTOs.PasswordResetRequest;
 import com.appkero.backend_kero.services.UsuarioService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

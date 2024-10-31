@@ -2,10 +2,10 @@ package com.appkero.backend_kero.services;
 
 import org.springframework.stereotype.Service;
 
-import com.appkero.backend_kero.entities.Produto;
-import com.appkero.backend_kero.entities.RedeSocial;
-import com.appkero.backend_kero.entities.Usuario;
-import com.appkero.backend_kero.entities.DTOs.ProdutoRequest;
+import com.appkero.backend_kero.domain.produto.Produto;
+import com.appkero.backend_kero.domain.produto.ProdutoRequest;
+import com.appkero.backend_kero.domain.redeSocial.RedeSocial;
+import com.appkero.backend_kero.domain.usuario.Usuario;
 import com.appkero.backend_kero.repositories.ProdutoRepository;
 import com.appkero.backend_kero.repositories.RedeSocialRepository;
 import com.appkero.backend_kero.repositories.UsuarioRepository;
