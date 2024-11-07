@@ -38,7 +38,8 @@ public class SecurityConfiguration {
     };
 
     public static final String[] ENDPOINTS_ADMIN = {
-            "/api/usuario/all"
+            "/api/usuario/all",
+            "/api/usuario/{usuarioId}"
     };
 
     @Bean

@@ -58,6 +58,12 @@ public class UsuarioService {
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
     }
 
+    public void deleteUser(Long id) {
+        Usuario user = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
+        usuarioRepository.delete(user);
+    }
+
     public Usuario vincularEndereco(Long usuarioId, Long enderecoId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
