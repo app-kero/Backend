@@ -2,6 +2,7 @@ package com.appkero.backend_kero.services;
 
 import java.util.List;
 
+import com.appkero.backend_kero.domain.usuario.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,12 +39,14 @@ public class UsuarioService {
     }
 
     public Usuario insert(UsuarioRequest dto, Arquivo fotoperfil) {
+        if (usuarioRepository.findByEmail(dto.email()) != null) throw new RuntimeException("Usuário já cadastrado com o email " + dto.email());
         Usuario user = Usuario.builder()
             .nome(dto.nome())
             .sobrenome(dto.sobrenome())
             .email(dto.email())
             .telefone(dto.telefone())
             .password(securityConfiguration.passwordEncoder().encode(dto.password()))
+            .role(UserRole.USER)
             .fotoPerfil(fotoperfil)
             .build();
         
@@ -76,7 +79,7 @@ public class UsuarioService {
     }
 
     public void resetPassword(String token, String newPassword) {
-        if (jwtTokenService.validateToken(token).length() > 0) {
+        if (!jwtTokenService.validateToken(token).isEmpty()) {
             String email = jwtTokenService.extractEmailFromToken(token);
             var user = (Usuario) usuarioRepository.findByEmail(email);
 

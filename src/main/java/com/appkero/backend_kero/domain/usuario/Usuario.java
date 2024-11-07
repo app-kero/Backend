@@ -64,7 +64,7 @@ public class Usuario extends BasicEntity implements UserDetails {
 
     private UserRole role;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne()
     @JoinColumn(name = "foto_perfil_id")
     private Arquivo fotoPerfil;
 

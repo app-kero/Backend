@@ -35,8 +35,9 @@ public class ArquivoService {
         return arquivoRepository.save(arquivo);
     }
 
-    public InputStream getArquivo(String fileName) throws Exception {
-        return minioService.downloadFile(fileName);
+    public InputStream getArquivo(Long arquivoId) throws Exception {
+        var arquivo = arquivoRepository.findById(arquivoId).orElseThrow(() -> new RuntimeException("Arquivo não existe!"));
+        return minioService.downloadFile(arquivo.getUrlS3());
     }
 
     public Stream<Arquivo> getArquivos() {

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping(value = "/api/auth")
+@RequestMapping(value = "/api/recovery")
 public class PasswordRecoveryController {
 
     @Autowired

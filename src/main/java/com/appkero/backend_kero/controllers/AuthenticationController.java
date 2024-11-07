@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,7 +14,6 @@ import com.appkero.backend_kero.domain.usuario.LoginResponse;
 import com.appkero.backend_kero.domain.usuario.Usuario;
 import com.appkero.backend_kero.infra.JwtTokenService;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;
 
 @RestController
@@ -26,7 +26,7 @@ public class AuthenticationController {
     private JwtTokenService jwtTokenService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest user) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest user) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(user.email(), user.password());
 
         var auth = authenticationManager.authenticate(usernamePassword);

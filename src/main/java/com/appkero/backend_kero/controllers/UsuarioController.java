@@ -72,10 +72,10 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
     }
 
-    @GetMapping("/foto-perfil/{nomeArquivo}")
-    public ResponseEntity<InputStreamResource> getFotoPerfil(@PathVariable String nomeArquivo) throws FileNotFoundException {
+    @GetMapping("/foto-perfil/{arquivoId}")
+    public ResponseEntity<InputStreamResource> getFotoPerfil(@PathVariable Long arquivoId) throws FileNotFoundException {
         try {
-            InputStream file = arquivoService.getArquivo(nomeArquivo);
+            InputStream file = arquivoService.getArquivo(arquivoId);
             return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(new InputStreamResource(file));
