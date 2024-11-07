@@ -40,7 +40,7 @@ public class UsuarioController {
     @Autowired
     private ArquivoService arquivoService;
 
-    @PostMapping
+    @PostMapping("/new")
     public ResponseEntity<Usuario> insert(
             @RequestParam("file") MultipartFile file,
             @RequestParam("nome") String nome,
@@ -66,7 +66,7 @@ public class UsuarioController {
     }
 
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<Usuario>> getAll() {
         List<Usuario> usuarios = this.usuarioService.getAll();
         return ResponseEntity.ok(usuarios);

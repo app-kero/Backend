@@ -25,12 +25,11 @@ public class SecurityConfiguration {
             "/api/auth/login",
             "/api/recovery/recover-password",
             "/api/recovery/reset-password",
-            "/api/usuario",
+            "/api/usuario/new",
     };
 
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
             "/api/usuario/foto-perfil",
-            "/api/usuario/**",
             "/api/usuario/{usuarioId}/vincular-endereco"
     };
 
@@ -39,7 +38,7 @@ public class SecurityConfiguration {
     };
 
     public static final String[] ENDPOINTS_ADMIN = {
-            "/api/usuario/test/administrator"
+            "/api/usuario/all"
     };
 
     @Bean
@@ -50,7 +49,6 @@ public class SecurityConfiguration {
                     .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
                     .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_REQUIRED).authenticated()
                     .requestMatchers(ENDPOINTS_ADMIN).hasRole("ADMIN")
-                    .requestMatchers(HttpMethod.GET, "/api/usuario").hasRole("ADMIN")
                     .requestMatchers(ENDPOINTS_USER).hasRole("USER")
                     .anyRequest().authenticated()
                 ).addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
