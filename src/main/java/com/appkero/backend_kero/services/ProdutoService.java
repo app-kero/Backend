@@ -1,5 +1,7 @@
 package com.appkero.backend_kero.services;
 
+import com.appkero.backend_kero.domain.produto.Tag;
+import com.appkero.backend_kero.repositories.TagRepository;
 import org.springframework.stereotype.Service;
 
 import com.appkero.backend_kero.domain.produto.Produto;
@@ -10,40 +12,47 @@ import com.appkero.backend_kero.repositories.ProdutoRepository;
 import com.appkero.backend_kero.repositories.RedeSocialRepository;
 import com.appkero.backend_kero.repositories.UsuarioRepository;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ProdutoService {
 
     private final ProdutoRepository produtoRepository;
-    private final RedeSocialRepository redeSocialRepository;
+    private final TagRepository tagRepository;
     private final UsuarioRepository usuarioRepository;
 
-    public ProdutoService(ProdutoRepository produtoRepository, RedeSocialRepository redeSocialRepository, UsuarioRepository usuarioRepository) {
+    public ProdutoService(ProdutoRepository produtoRepository, TagRepository tagRepository, UsuarioRepository usuarioRepository) {
         this.produtoRepository = produtoRepository;
-        this.redeSocialRepository = redeSocialRepository;
         this.usuarioRepository = usuarioRepository;
+        this.tagRepository = tagRepository;
     }
 
-    public Produto cadastrarProduto(ProdutoRequest produto) {
-        Usuario who = this.usuarioRepository.findById(produto.usuarioId())
+    public Produto cadastrarProduto(ProdutoRequest produto, Long usuarioId) {
+        Usuario who = this.usuarioRepository.findById(usuarioId)
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
 
-        RedeSocial redeSocial = new RedeSocial();
-        redeSocial.setWhatsapp(produto.redeSocial().whatsapp());
-        redeSocial.setFacebook(produto.redeSocial().facebook());
-        redeSocial.setSite(produto.redeSocial().site());
-        redeSocial.setInstagram(produto.redeSocial().instagram());
+        List<Tag> tags = produto.tags().stream()
+                .map(tagName -> tagRepository.findByNome(tagName)
+                        .orElseGet(() -> {
+                            Tag newTag = Tag.builder().nome(tagName).build();
+                            return tagRepository.save(newTag);
+                        })).toList();
 
-        redeSocial = redeSocialRepository.save(redeSocial);
-
-        Produto produtoDB = new Produto();
-        produtoDB.setNome(produto.nome());
-        produtoDB.setDescricao(produto.descricao());
-        produtoDB.setHorario(produto.horario());
-        produtoDB.setLocal(produto.local());
-        produtoDB.setUsuario(who);
-        produtoDB.setRedeSocial(redeSocial);
+        Produto produtoDB = Produto.builder()
+                .nome(produto.nome())
+                .descricao(produto.descricao())
+                .horario(produto.horario())
+                .local(produto.local())
+                .usuario(who)
+                .tags(tags)
+                .build();
 
         return this.produtoRepository.save(produtoDB);
+    }
+
+    public List<Produto> buscarPorTags(String tagNome) {
+        return produtoRepository.findByTagsNome(tagNome);
     }
     
 }

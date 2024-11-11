@@ -33,31 +33,19 @@ public class UsuarioController {
     @Autowired
     private ArquivoService arquivoService;
 
-    @PostMapping("/new")
-    public ResponseEntity<Usuario> insert(
-            @RequestParam("file") MultipartFile file,
-            @RequestParam("nome") String nome,
-            @RequestParam("sobrenome") String sobrenome,
-            @RequestParam("telefone") String telefone,
-            @RequestParam("email") String email,
-            @RequestParam("password") String password,
-            @RequestParam("role") UserRole role) throws Exception {
-
-        Arquivo arquivo = arquivoService.store(file);
-
-        UsuarioRequest usuarioRequest = UsuarioRequest.builder()
-                .nome(nome)
-                .sobrenome(sobrenome)
-                .telefone(telefone)
-                .email(email)
-                .password(password)
-                .role(role)
-                .build();
-
-        Usuario newUser = usuarioService.insert(usuarioRequest, arquivo);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+    @PostMapping(value = "/new", consumes = {"multipart/form-data"})
+    public ResponseEntity<?> insert(
+        @RequestPart("user") UsuarioRequest user,
+        @RequestPart("file") MultipartFile file
+    ) {
+        try {
+            Arquivo arquivo = arquivoService.store(file);
+            Usuario newUser = usuarioService.insert(user, arquivo);
+            return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao tentar inserir um novo usuário: " + e.getMessage());
+        }
     }
-
 
     @GetMapping("/all")
     public ResponseEntity<List<Usuario>> getAll() {

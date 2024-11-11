@@ -1,33 +1,27 @@
 package com.appkero.backend_kero.domain.produto;
 
 import java.time.LocalTime;
+import java.util.List;
 
 import com.appkero.backend_kero.domain.BasicEntity;
 import com.appkero.backend_kero.domain.redeSocial.RedeSocial;
 import com.appkero.backend_kero.domain.usuario.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @Table(name = "tb_produto")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @ToString(callSuper = true)
+@Builder
 public class Produto extends BasicEntity {
 
-    @NotBlank(message = "O campo nome não pode ser vazio")
     private String nome;
     private String descricao;
     private String local;
@@ -38,13 +32,13 @@ public class Produto extends BasicEntity {
     @JoinColumn(name = "usuario_id", nullable = false) 
     private Usuario usuario;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "rede_social_id", referencedColumnName = "id")
-    private RedeSocial redeSocial;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "tag_id", referencedColumnName = "id")
-    private Tag tag;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "produto_tag",
+            joinColumns = @JoinColumn(name = "produto_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private List<Tag> tags;
 
     public String getHorarioFormatado() {
         return horario != null ? horario.toString() : "Horário não especificado";

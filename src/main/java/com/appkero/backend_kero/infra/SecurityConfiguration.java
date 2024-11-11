@@ -30,7 +30,8 @@ public class SecurityConfiguration {
 
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
             "/api/usuario/foto-perfil",
-            "/api/usuario/{usuarioId}/vincular-endereco"
+            "/api/usuario/{usuarioId}/vincular-endereco",
+            "/api/produto/new/{usuarioId}"
     };
 
     public static final String[] ENDPOINTS_USER = {
