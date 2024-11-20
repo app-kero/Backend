@@ -26,8 +26,12 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-       var token = this.recoveryToken(request);
-        if(token != null){
+        var token = this.recoveryToken(request);
+        if (jwtTokenService.isTokenBlacklisted(token)) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Token inválido ou expirado!");
+        }
+        if (token != null) {
             var login = jwtTokenService.validateToken(token);
             UserDetails user = usuarioRepository.findByEmail(login);
 

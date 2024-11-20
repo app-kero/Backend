@@ -1,5 +1,6 @@
 package com.appkero.backend_kero.infra;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,7 @@ public class SecurityConfiguration {
 
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
             "/api/auth/login",
+            "/api/auth/refresh",
             "/api/recovery/recover-password",
             "/api/recovery/reset-password",
             "/api/usuario/new",
@@ -30,6 +32,7 @@ public class SecurityConfiguration {
 
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
             "/api/usuario/foto-perfil",
+            "/api/auth/logout",
             "/api/usuario/{usuarioId}/vincular-endereco",
             "/api/produto/new/{usuarioId}"
     };
