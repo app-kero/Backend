@@ -4,6 +4,8 @@ import java.util.List;
 import java.io.InputStream;
 import java.io.FileNotFoundException;
 
+import com.appkero.backend_kero.domain.usuario.UsuarioUpdate;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
@@ -33,17 +35,42 @@ public class UsuarioController {
     @Autowired
     private ArquivoService arquivoService;
 
-    @PostMapping(value = "/new", consumes = {"multipart/form-data"})
-    public ResponseEntity<?> insert(
-        @RequestPart("user") UsuarioRequest user,
-        @RequestPart("file") MultipartFile file
-    ) {
+//    @PostMapping(value = "/new", consumes = {"multipart/form-data"})
+//    public ResponseEntity<?> insert(
+//        @RequestPart("user") UsuarioRequest user,
+//        @RequestPart("file") MultipartFile file
+//    ) {
+//        try {
+//            Arquivo arquivo = arquivoService.store(file);
+//            Usuario newUser = usuarioService.insert(user, arquivo);
+//            return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao tentar inserir um novo usuário: " + e.getMessage());
+//        }
+//    }
+
+    @PostMapping("/new")
+    public ResponseEntity<?> cadastrar(@RequestBody @Valid UsuarioRequest request) {
         try {
-            Arquivo arquivo = arquivoService.store(file);
-            Usuario newUser = usuarioService.insert(user, arquivo);
-            return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+            Usuario novoUsuario = usuarioService.insert(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(novoUsuario);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao tentar inserir um novo usuário: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao cadastrar usuário: " + e.getMessage());
+        }
+    }
+
+    @PatchMapping(value = "/completar-cadastro/{usuarioId}", consumes = {"multipart/form-data"})
+    public ResponseEntity<?> completarCadastro(
+            @RequestPart("file") MultipartFile file,
+            @RequestPart("user") @Valid UsuarioUpdate request,
+            @PathVariable Long usuarioId) {
+        try {
+            Usuario usuarioAtualizado = usuarioService.completarCadastro(request, file, usuarioId);
+            return ResponseEntity.ok(usuarioAtualizado);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao atualizar cadastro.");
         }
     }
 
@@ -79,14 +106,6 @@ public class UsuarioController {
         } catch(Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-    }
-
-    @PutMapping("/{usuarioId}/vincular-endereco")
-    public ResponseEntity<Usuario> vincularEndereco(@PathVariable Long usuarioId,
-            @RequestBody EnderecoRequest endereco) {
-        Endereco enderecoDB = enderecoService.insert(endereco);
-        Usuario usuario = usuarioService.vincularEndereco(usuarioId, enderecoDB.getId());
-        return ResponseEntity.ok(usuario);
     }
 
 }

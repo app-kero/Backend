@@ -3,6 +3,7 @@ package com.appkero.backend_kero.domain.usuario;
 import java.util.Collection;
 import java.util.List;
 
+import com.appkero.backend_kero.domain.redeSocial.RedeSocial;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,13 +42,9 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class Usuario extends BasicEntity implements UserDetails {
 
-    @NotBlank
     private String nome;
-    @NotBlank
     private String sobrenome;
-    @NotBlank
     private String telefone;
-    @NotBlank
     @Email
     @Column(unique = true)
     private String email;
@@ -68,8 +65,16 @@ public class Usuario extends BasicEntity implements UserDetails {
     @JoinColumn(name = "foto_perfil_id")
     private Arquivo fotoPerfil;
 
+    @OneToOne
+    @JoinColumn(name = "rede_social_id")
+    private RedeSocial redesSociais;
+
     public String getNomeCompleto() {
-        return this.nome + " " + this.sobrenome;
+        if (!this.sobrenome.isEmpty()){
+            return this.nome + " " + this.sobrenome;
+        } else {
+            return this.nome;
+        }
     }
 
     @Override

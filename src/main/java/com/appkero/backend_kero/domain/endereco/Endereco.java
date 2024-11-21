@@ -24,7 +24,7 @@ public class Endereco extends BasicEntity {
     
     @NotBlank(message = "O campo rua não pode ser vazio")
     private String rua;
-    @NotBlank(message = "O campo bairoo não pode ser vazio")
+    @NotBlank(message = "O campo bairro não pode ser vazio")
     private String bairro;
     private Integer numero;
     @NotBlank(message = "O campo cidade não pode ser vazio")
@@ -37,14 +37,12 @@ public class Endereco extends BasicEntity {
     private Usuario usuario;
 
     public String getEnderecoCompleto() {
-        StringBuilder enderecoCompleto = new StringBuilder();
-        enderecoCompleto.append(rua)
-                        .append(", ")
-                        .append(numero != null ? numero : "S/N")
-                        .append(", ").append(bairro)
-                        .append(", ").append(cidade)
-                        .append(", ").append(estado);
-        
-        return enderecoCompleto.toString();
+
+        return rua +
+                ", " +
+                (numero != null ? numero : "S/N") +
+                ", " + bairro +
+                ", " + cidade +
+                ", " + estado;
     }
 }

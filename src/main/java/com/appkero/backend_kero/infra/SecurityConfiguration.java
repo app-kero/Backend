@@ -34,7 +34,8 @@ public class SecurityConfiguration {
             "/api/usuario/foto-perfil",
             "/api/auth/logout",
             "/api/usuario/{usuarioId}/vincular-endereco",
-            "/api/produto/new/{usuarioId}"
+            "/api/produto/new/{usuarioId}",
+            "/api/usuario/completar-cadastro/{usuarioId}"
     };
 
     public static final String[] ENDPOINTS_USER = {

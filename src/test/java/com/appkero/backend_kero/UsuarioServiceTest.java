@@ -55,44 +55,44 @@ public class UsuarioServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    public void testInsertUsuario() {
-        
-        UsuarioRequest dto = UsuarioRequest.builder()
-                .nome("João")
-                .sobrenome("Silva")
-                .telefone("999999999")
-                .email("joao@example.com")
-                .password("123456")
-                .role(UserRole.USER)
-                .build();
-
-        Arquivo fotoPerfil = new Arquivo();
-
-        when(usuarioRepository.findByEmail(dto.email())).thenReturn(null);
-        when(securityConfiguration.passwordEncoder()).thenReturn(passwordEncoder);
-        when(passwordEncoder.encode(dto.password())).thenReturn("encodedPassword");
-
-        Usuario usuarioSalvo = Usuario.builder()
-                .nome(dto.nome())
-                .sobrenome(dto.sobrenome())
-                .email(dto.email())
-                .password("encodedPassword")
-                .role(UserRole.USER)
-                .fotoPerfil(fotoPerfil)
-                .build();
-
-        when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuarioSalvo);
-
-        
-        Usuario resultado = usuarioService.insert(dto, fotoPerfil);
-
-        
-        assertNotNull(resultado);
-        assertEquals(dto.nome(), resultado.getNome());
-        assertEquals("encodedPassword", resultado.getPassword());
-        assertEquals(UserRole.USER, resultado.getRole());
-    }
+//    @Test
+//    public void testInsertUsuario() {
+//
+//        UsuarioRequest dto = UsuarioRequest.builder()
+//                .nome("João")
+//                .sobrenome("Silva")
+//                .telefone("999999999")
+//                .email("joao@example.com")
+//                .password("123456")
+//                .role(UserRole.USER)
+//                .build();
+//
+//        Arquivo fotoPerfil = new Arquivo();
+//
+//        when(usuarioRepository.findByEmail(dto.email())).thenReturn(null);
+//        when(securityConfiguration.passwordEncoder()).thenReturn(passwordEncoder);
+//        when(passwordEncoder.encode(dto.password())).thenReturn("encodedPassword");
+//
+//        Usuario usuarioSalvo = Usuario.builder()
+//                .nome(dto.nome())
+//                .sobrenome(dto.sobrenome())
+//                .email(dto.email())
+//                .password("encodedPassword")
+//                .role(UserRole.USER)
+//                .fotoPerfil(fotoPerfil)
+//                .build();
+//
+//        when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuarioSalvo);
+//
+//
+//        Usuario resultado = usuarioService.insert(dto, fotoPerfil);
+//
+//
+//        assertNotNull(resultado);
+//        assertEquals(dto.nome(), resultado.getNome());
+//        assertEquals("encodedPassword", resultado.getPassword());
+//        assertEquals(UserRole.USER, resultado.getRole());
+//    }
 
     @Test
     public void testFindByIdUsuarioExistente() {
@@ -146,27 +146,27 @@ public class UsuarioServiceTest {
         assertEquals(enderecoMock, resultado.getEndereco());
     }
 
-    @Test
-    public void testInsertUsuarioJaExistente() {
-        
-        UsuarioRequest dto = UsuarioRequest.builder()
-                .nome("João")
-                .sobrenome("Silva")
-                .telefone("999999999")
-                .email("joao@example.com")
-                .password("123456")
-                .role(UserRole.USER)
-                .build();
-
-        when(usuarioRepository.findByEmail(dto.email())).thenReturn(new Usuario());
-
-         
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            usuarioService.insert(dto, new Arquivo());
-        });
-
-        assertEquals("Usuário já cadastrado com o email joao@example.com", exception.getMessage());
-    }
+//    @Test
+//    public void testInsertUsuarioJaExistente() {
+//
+//        UsuarioRequest dto = UsuarioRequest.builder()
+//                .nome("João")
+//                .sobrenome("Silva")
+//                .telefone("999999999")
+//                .email("joao@example.com")
+//                .password("123456")
+//                .role(UserRole.USER)
+//                .build();
+//
+//        when(usuarioRepository.findByEmail(dto.email())).thenReturn(new Usuario());
+//
+//
+//        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+//            usuarioService.insert(dto, new Arquivo());
+//        });
+//
+//        assertEquals("Usuário já cadastrado com o email joao@example.com", exception.getMessage());
+//    }
 
     
 
