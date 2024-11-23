@@ -3,6 +3,7 @@ package com.appkero.backend_kero.services;
 import java.io.InputStream;
 import java.util.stream.Stream;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.appkero.backend_kero.domain.arquivo.Arquivo;
 import com.appkero.backend_kero.repositories.ArquivoRepository;
 
+@Slf4j
 @Service
 public class ArquivoService {
 

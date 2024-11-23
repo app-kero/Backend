@@ -1,7 +1,10 @@
 package com.appkero.backend_kero.services;
 
+import com.appkero.backend_kero.domain.arquivo.Arquivo;
 import com.appkero.backend_kero.domain.produto.Tag;
 import com.appkero.backend_kero.repositories.TagRepository;
+import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import com.appkero.backend_kero.domain.produto.Produto;
@@ -11,33 +14,45 @@ import com.appkero.backend_kero.domain.usuario.Usuario;
 import com.appkero.backend_kero.repositories.ProdutoRepository;
 import com.appkero.backend_kero.repositories.RedeSocialRepository;
 import com.appkero.backend_kero.repositories.UsuarioRepository;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+@Slf4j
 @Service
 public class ProdutoService {
 
     private final ProdutoRepository produtoRepository;
     private final TagRepository tagRepository;
     private final UsuarioRepository usuarioRepository;
+    private final ArquivoService arquivoService;
 
-    public ProdutoService(ProdutoRepository produtoRepository, TagRepository tagRepository, UsuarioRepository usuarioRepository) {
+    public ProdutoService(ProdutoRepository produtoRepository, TagRepository tagRepository, UsuarioRepository usuarioRepository, ArquivoService arquivoService) {
         this.produtoRepository = produtoRepository;
         this.usuarioRepository = usuarioRepository;
         this.tagRepository = tagRepository;
+        this.arquivoService = arquivoService;
     }
 
-    public Produto cadastrarProduto(ProdutoRequest produto, Long usuarioId) {
+    @Transactional
+    public Produto cadastrarProduto(ProdutoRequest produto, List<MultipartFile> files, Long usuarioId) throws Exception {
         Usuario who = this.usuarioRepository.findById(usuarioId)
             .orElseThrow(() -> new RuntimeException("Usuário não encontrado!"));
 
-        List<Tag> tags = produto.tags().stream()
-                .map(tagName -> tagRepository.findByNome(tagName)
-                        .orElseGet(() -> {
-                            Tag newTag = Tag.builder().nome(tagName).build();
-                            return tagRepository.save(newTag);
-                        })).toList();
+        List<Tag> existingTags = tagRepository.findByNomeIn(produto.tags());
+        List<Tag> newTags = produto.tags().stream()
+                .filter(tagName -> existingTags.stream().noneMatch(tag -> tag.getNome().equals(tagName)))
+                .map(tagName -> Tag.builder().nome(tagName).build())
+                .collect(Collectors.toList());
+
+        if (!newTags.isEmpty()) {
+            tagRepository.saveAll(newTags);
+        }
+
+        List<Tag> allTags = Stream.concat(existingTags.stream(), newTags.stream()).collect(Collectors.toList());
 
         Produto produtoDB = Produto.builder()
                 .nome(produto.nome())
@@ -45,9 +60,19 @@ public class ProdutoService {
                 .preco(produto.preco())
                 .horario(produto.horario())
                 .local(produto.local())
+                .fotos(new ArrayList<>())
                 .usuario(who)
-                .tags(tags)
+                .tags(allTags)
                 .build();
+
+        produtoDB = this.produtoRepository.save(produtoDB);
+
+        if (files != null && !files.isEmpty()) {
+            for (MultipartFile file : files) {
+                Arquivo arquivo = arquivoService.store(file);
+                produtoDB.getFotos().add(arquivo);
+            }
+        }
 
         return this.produtoRepository.save(produtoDB);
     }

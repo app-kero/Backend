@@ -1,36 +1,21 @@
 package com.appkero.backend_kero.domain.usuario;
 
-import java.util.Collection;
-import java.util.List;
-
-import com.appkero.backend_kero.domain.redeSocial.RedeSocial;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import com.appkero.backend_kero.domain.BasicEntity;
 import com.appkero.backend_kero.domain.arquivo.Arquivo;
 import com.appkero.backend_kero.domain.endereco.Endereco;
 import com.appkero.backend_kero.domain.produto.Produto;
+import com.appkero.backend_kero.domain.redeSocial.RedeSocial;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_usuario")
@@ -57,11 +42,11 @@ public class Usuario extends BasicEntity implements UserDetails {
     private Endereco endereco;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private List<Produto> produtos;
+    private List<Produto> produtos = new ArrayList<>();
 
     private UserRole role;
 
-    @OneToOne()
+    @OneToOne(optional = true, cascade = CascadeType.ALL)
     @JoinColumn(name = "foto_perfil_id")
     private Arquivo fotoPerfil;
 
@@ -70,7 +55,7 @@ public class Usuario extends BasicEntity implements UserDetails {
     private RedeSocial redesSociais;
 
     public String getNomeCompleto() {
-        if (!this.sobrenome.isEmpty()){
+        if (this.sobrenome != null && !this.sobrenome.isEmpty()){
             return this.nome + " " + this.sobrenome;
         } else {
             return this.nome;

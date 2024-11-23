@@ -1,17 +1,16 @@
 package com.appkero.backend_kero.domain.produto;
 
-import java.math.BigDecimal;
-import java.time.LocalTime;
-import java.util.List;
-
 import com.appkero.backend_kero.domain.BasicEntity;
-import com.appkero.backend_kero.domain.redeSocial.RedeSocial;
+import com.appkero.backend_kero.domain.arquivo.Arquivo;
 import com.appkero.backend_kero.domain.usuario.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
+
+import java.math.BigDecimal;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_produto")
@@ -19,7 +18,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString(callSuper = true)
+@ToString(callSuper = true, exclude = {"usuario","fotos"})
 @Builder
 public class Produto extends BasicEntity {
 
@@ -40,7 +39,11 @@ public class Produto extends BasicEntity {
             joinColumns = @JoinColumn(name = "produto_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-    private List<Tag> tags;
+    private List<Tag> tags = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "produto_id")
+    private List<Arquivo> fotos = new ArrayList<>();
 
     public String getHorarioFormatado() {
         return horario != null ? horario.toString() : "Horário não especificado";

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,10 +18,20 @@ public class ProdutoController {
     @Autowired
     private ProdutoService produtoService;
 
-    @PostMapping("/new/{usuarioId}")
-    public ResponseEntity<Produto> insert(@RequestBody ProdutoRequest produtoRequest, @PathVariable Long usuarioId) {
-        Produto produto = produtoService.cadastrarProduto(produtoRequest, usuarioId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(produto);
+    @PostMapping(value = "/new/{usuarioId}", consumes = {"multipart/form-data"})
+    public ResponseEntity<?> insert(
+            @RequestPart("produto") ProdutoRequest produtoRequest,
+            @RequestPart("files") List<MultipartFile> files,
+            @PathVariable Long usuarioId
+    ) {
+        try {
+            Produto produto = produtoService.cadastrarProduto(produtoRequest, files, usuarioId);
+            return ResponseEntity.status(HttpStatus.CREATED).body(produto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao adicionar produto: " + e.getMessage());
+        }
     }
 
     @PatchMapping("/atulizar-produto/{produtoId}")
