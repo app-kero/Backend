@@ -23,10 +23,52 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(produto);
     }
 
+    @PatchMapping("/atulizar-produto/{produtoId}")
+    public ResponseEntity<?> atualizarProduto(@PathVariable Long produtoId, @RequestBody ProdutoRequest produtoRequest) {
+        try {
+            Produto produto = produtoService.atualizarProduto(produtoRequest, produtoId);
+            return ResponseEntity.status(HttpStatus.OK).body(produto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao atualizar produto.");
+        }
+    }
+
+    @DeleteMapping("/remover/{produtoId}")
+    public ResponseEntity<?> remover(@PathVariable Long produtoId) {
+        try {
+            produtoService.deleteProduto(produtoId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Produto removido.");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao remover produto.");
+        }
+    }
+
+    @GetMapping("/{nomeProduto}")
+    public ResponseEntity<?> buscarPorNome(@PathVariable String nomeProduto) {
+        try {
+            List<Produto> produtos = produtoService.buscarProdutosPorNome(nomeProduto);
+            return ResponseEntity.status(HttpStatus.OK).body(produtos);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao buscar produtos.");
+        }
+    }
+
     @GetMapping("/tag/{nomeTag}")
-    public ResponseEntity<List<Produto>> buscarPorTag(@PathVariable String nomeTag) {
-        List<Produto> produtos = produtoService.buscarPorTags(nomeTag);
-        return ResponseEntity.ok(produtos);
+    public ResponseEntity<?> buscarPorTag(@PathVariable String nomeTag) {
+        try {
+            List<Produto> produtos = produtoService.buscarPorTags(nomeTag);
+            return ResponseEntity.status(HttpStatus.OK).body(produtos);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao buscar produtos.");
+        }
     }
 
 }

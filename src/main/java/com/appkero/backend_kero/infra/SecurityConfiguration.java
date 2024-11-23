@@ -28,13 +28,16 @@ public class SecurityConfiguration {
             "/api/recovery/recover-password",
             "/api/recovery/reset-password",
             "/api/usuario/new",
+            "/api/produtos/{nomeProduto}",
+            "/api/produtos/tag/{nomeTag}"
     };
 
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
             "/api/usuario/foto-perfil",
             "/api/auth/logout",
-            "/api/usuario/{usuarioId}/vincular-endereco",
-            "/api/produto/new/{usuarioId}",
+            "/api/produtos/new/{usuarioId}",
+            "/api/produtos/remover/{produtoId}",
+            "/api/produtos/atulizar-produto/{produtoId}",
             "/api/usuario/completar-cadastro/{usuarioId}"
     };
 

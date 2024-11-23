@@ -1,5 +1,6 @@
 package com.appkero.backend_kero.domain.produto;
 
+import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class Produto extends BasicEntity {
 
     private String nome;
     private String descricao;
+    private BigDecimal preco;
     private String local;
     private LocalTime horario;
 
