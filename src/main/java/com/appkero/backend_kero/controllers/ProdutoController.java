@@ -70,6 +70,18 @@ public class ProdutoController {
         }
     }
 
+    @GetMapping
+    public ResponseEntity<?> buscarTodos() {
+        try {
+            List<Produto> produtos = produtoService.findAllProdutos();
+            return ResponseEntity.status(HttpStatus.OK).body(produtos);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao buscar produtos.");
+        }
+    }
+
     @GetMapping("/tag/{nomeTag}")
     public ResponseEntity<?> buscarPorTag(@PathVariable String nomeTag) {
         try {

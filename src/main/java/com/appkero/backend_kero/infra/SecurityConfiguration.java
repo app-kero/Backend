@@ -28,6 +28,7 @@ public class SecurityConfiguration {
             "/api/recovery/recover-password",
             "/api/recovery/reset-password",
             "/api/usuario/new",
+            "/api/produtos",
             "/api/produtos/{nomeProduto}",
             "/api/produtos/tag/{nomeTag}"
     };

@@ -120,5 +120,9 @@ public class ProdutoService {
     public List<Produto> buscarPorTags(String tagNome) {
         return produtoRepository.findByTagsNomeIgnoreCase(tagNome);
     }
+
+    public List<Produto> findAllProdutos() {
+        return this.produtoRepository.findAll();
+    }
     
 }
