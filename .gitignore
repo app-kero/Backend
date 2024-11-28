@@ -33,3 +33,5 @@ build/
 .vscode/
 
 tools/minio_data
+
+/uploads

@@ -76,7 +76,7 @@ public class UsuarioService {
         return usuarioRepository.save(novoUsuario);
     }
 
-    public Usuario completarCadastro(UsuarioUpdate request, MultipartFile file, Long usuarioId) throws Exception {
+    public Usuario completarCadastro(UsuarioUpdate request, Arquivo arquivo, Long usuarioId) throws Exception {
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado."));
 
@@ -100,8 +100,7 @@ public class UsuarioService {
             RedeSocial rede = redeSocialRepository.save(request.redesSociais());
             usuario.setRedesSociais(rede);
         }
-        if (file != null) {
-            Arquivo arquivo = arquivoService.store(file);
+        if (arquivo != null) {
             usuario.setFotoPerfil(arquivo);
         }
 

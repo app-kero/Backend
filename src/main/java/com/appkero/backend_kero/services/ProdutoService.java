@@ -1,19 +1,16 @@
 package com.appkero.backend_kero.services;
 
 import com.appkero.backend_kero.domain.arquivo.Arquivo;
+import com.appkero.backend_kero.domain.produto.Produto;
+import com.appkero.backend_kero.domain.produto.ProdutoRequest;
 import com.appkero.backend_kero.domain.produto.Tag;
+import com.appkero.backend_kero.domain.usuario.Usuario;
+import com.appkero.backend_kero.repositories.ProdutoRepository;
 import com.appkero.backend_kero.repositories.TagRepository;
+import com.appkero.backend_kero.repositories.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import com.appkero.backend_kero.domain.produto.Produto;
-import com.appkero.backend_kero.domain.produto.ProdutoRequest;
-import com.appkero.backend_kero.domain.redeSocial.RedeSocial;
-import com.appkero.backend_kero.domain.usuario.Usuario;
-import com.appkero.backend_kero.repositories.ProdutoRepository;
-import com.appkero.backend_kero.repositories.RedeSocialRepository;
-import com.appkero.backend_kero.repositories.UsuarioRepository;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -54,25 +51,22 @@ public class ProdutoService {
 
         List<Tag> allTags = Stream.concat(existingTags.stream(), newTags.stream()).collect(Collectors.toList());
 
+        List<Arquivo> arquivos = new ArrayList<>();
+        for (MultipartFile file : files) {
+            Arquivo arquivo = arquivoService.uploadFile(file);
+            arquivos.add(arquivo);
+        }
+
         Produto produtoDB = Produto.builder()
                 .nome(produto.nome())
                 .descricao(produto.descricao())
                 .preco(produto.preco())
                 .horario(produto.horario())
                 .local(produto.local())
-                .fotos(new ArrayList<>())
+                .fotos(arquivos)
                 .usuario(who)
                 .tags(allTags)
                 .build();
-
-        produtoDB = this.produtoRepository.save(produtoDB);
-
-        if (files != null && !files.isEmpty()) {
-            for (MultipartFile file : files) {
-                Arquivo arquivo = arquivoService.store(file);
-                produtoDB.getFotos().add(arquivo);
-            }
-        }
 
         return this.produtoRepository.save(produtoDB);
     }

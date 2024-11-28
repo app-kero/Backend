@@ -27,6 +27,7 @@ public class SecurityConfiguration {
             "/api/auth/refresh",
             "/api/recovery/recover-password",
             "/api/recovery/reset-password",
+            "/api/arquivos/{nomeArquivo}",
             "/api/usuario/new",
             "/api/produtos",
             "/api/produtos/{nomeProduto}",
@@ -34,7 +35,6 @@ public class SecurityConfiguration {
     };
 
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
-            "/api/usuario/foto-perfil",
             "/api/auth/logout",
             "/api/produtos/new/{usuarioId}",
             "/api/produtos/remover/{produtoId}",

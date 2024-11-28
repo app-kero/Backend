@@ -6,6 +6,8 @@ import com.appkero.backend_kero.domain.usuario.Usuario;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.math.BigDecimal;
 import java.time.LocalTime;
@@ -41,8 +43,9 @@ public class Produto extends BasicEntity {
     )
     private List<Tag> tags = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "produto_id")
+    @Fetch(FetchMode.SUBSELECT)
     private List<Arquivo> fotos = new ArrayList<>();
 
     public String getHorarioFormatado() {

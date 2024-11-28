@@ -20,5 +20,7 @@ public class Arquivo extends BasicEntity {
     private String name;
     private String contentType;
     private Long size;
-    private String urlS3;
+    private String url;
+    @Column(unique = true)
+    private String hash;
 }
