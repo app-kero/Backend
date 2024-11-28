@@ -30,6 +30,7 @@ public class SecurityConfiguration {
             "/api/arquivos/{nomeArquivo}",
             "/api/usuario/new",
             "/api/produtos",
+            "/api/produtos/one/{produtoId}",
             "/api/produtos/{nomeProduto}",
             "/api/produtos/tag/{nomeTag}"
     };

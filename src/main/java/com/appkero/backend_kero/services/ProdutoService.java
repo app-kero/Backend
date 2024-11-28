@@ -118,5 +118,9 @@ public class ProdutoService {
     public List<Produto> findAllProdutos() {
         return this.produtoRepository.findAll();
     }
+
+    public Produto buscarProdutoPorId(Long produtoId) {
+        return produtoRepository.findById(produtoId).orElseThrow(() -> new RuntimeException("Produto não encontrado!"));
+    }
     
 }

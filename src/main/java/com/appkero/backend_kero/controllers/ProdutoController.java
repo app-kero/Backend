@@ -98,4 +98,16 @@ public class ProdutoController {
         }
     }
 
+    @GetMapping("/one/{produtoId}")
+    public ResponseEntity<?> buscarPorId(@PathVariable Long produtoId) {
+        try {
+            Produto produto = produtoService.buscarProdutoPorId(produtoId);
+            return ResponseEntity.status(HttpStatus.OK).body(produto);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao buscar produto.");
+        }
+    }
+
 }
