@@ -4,6 +4,7 @@ import com.appkero.backend_kero.domain.arquivo.Arquivo;
 import com.appkero.backend_kero.domain.usuario.Usuario;
 import com.appkero.backend_kero.domain.usuario.UsuarioRequest;
 import com.appkero.backend_kero.domain.usuario.UsuarioUpdate;
+import com.appkero.backend_kero.infra.JwtTokenService;
 import com.appkero.backend_kero.services.ArquivoService;
 import com.appkero.backend_kero.services.UsuarioService;
 import jakarta.validation.Valid;
@@ -23,6 +24,8 @@ public class UsuarioController {
     private UsuarioService usuarioService;
     @Autowired
     private ArquivoService arquivoService;
+    @Autowired
+    private JwtTokenService jwtTokenService;
 
     @PostMapping("/new")
     public ResponseEntity<?> cadastrar(@RequestBody @Valid UsuarioRequest request) {
@@ -34,13 +37,14 @@ public class UsuarioController {
         }
     }
 
-    @PatchMapping(value = "/completar-cadastro/{usuarioId}", consumes = {"multipart/form-data"})
+    @PatchMapping(value = "/completar-cadastro", consumes = {"multipart/form-data"})
     public ResponseEntity<?> completarCadastro(
             @RequestPart("file") MultipartFile file,
             @RequestPart("user") @Valid UsuarioUpdate request,
-            @PathVariable Long usuarioId) {
+            @RequestHeader("Authorization") String token) {
         try {
             Arquivo arquivo = arquivoService.uploadFile(file);
+            Long usuarioId = jwtTokenService.extractUserIdFromToken(token.replace("Bearer ", ""));
             Usuario usuarioAtualizado = usuarioService.completarCadastro(request, arquivo, usuarioId);
             return ResponseEntity.ok(usuarioAtualizado);
         } catch (IllegalArgumentException e) {

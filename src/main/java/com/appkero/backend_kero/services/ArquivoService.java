@@ -68,7 +68,7 @@ public class ArquivoService {
     }
 
     private String getFileDownloadUrl(String fileName) {
-        return ServletUriComponentsBuilder.fromCurrentRequestUri().replacePath(null).toUriString() + "/api/files/" + fileName;
+        return ServletUriComponentsBuilder.fromCurrentRequestUri().replacePath(null).toUriString() + "/api/arquivos/" + fileName;
     }
 
     private String calculateFileHash(MultipartFile file) throws IOException, NoSuchAlgorithmException {

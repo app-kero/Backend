@@ -36,10 +36,10 @@ public class SecurityConfiguration {
 
     public static final String[] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
             "/api/auth/logout",
-            "/api/produtos/new/{usuarioId}",
+            "/api/produtos/new",
             "/api/produtos/remover/{produtoId}",
             "/api/produtos/atulizar-produto/{produtoId}",
-            "/api/usuario/completar-cadastro/{usuarioId}"
+            "/api/usuario/completar-cadastro"
     };
 
     public static final String[] ENDPOINTS_USER = {

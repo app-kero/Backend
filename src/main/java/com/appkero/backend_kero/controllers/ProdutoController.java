@@ -2,6 +2,7 @@ package com.appkero.backend_kero.controllers;
 
 import com.appkero.backend_kero.domain.produto.Produto;
 import com.appkero.backend_kero.domain.produto.ProdutoRequest;
+import com.appkero.backend_kero.infra.JwtTokenService;
 import com.appkero.backend_kero.services.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,14 +18,17 @@ public class ProdutoController {
 
     @Autowired
     private ProdutoService produtoService;
+    @Autowired
+    private JwtTokenService jwtTokenService;
 
-    @PostMapping(value = "/new/{usuarioId}", consumes = {"multipart/form-data"})
+    @PostMapping(value = "/new", consumes = {"multipart/form-data"})
     public ResponseEntity<?> insert(
+            @RequestHeader("Authorization") String token,
             @RequestPart("produto") ProdutoRequest produtoRequest,
-            @RequestPart("files") List<MultipartFile> files,
-            @PathVariable Long usuarioId
+            @RequestPart("files") List<MultipartFile> files
     ) {
         try {
+            Long usuarioId = jwtTokenService.extractUserIdFromToken(token.replace("Bearer ", ""));
             Produto produto = produtoService.cadastrarProduto(produtoRequest, files, usuarioId);
             return ResponseEntity.status(HttpStatus.CREATED).body(produto);
         } catch (IllegalArgumentException e) {

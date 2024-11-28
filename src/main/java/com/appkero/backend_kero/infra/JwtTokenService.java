@@ -62,6 +62,14 @@ public class JwtTokenService {
         }
     }
 
+    public Long extractUserIdFromToken(String token) {
+        DecodedJWT decodedJWT = JWT.require(Algorithm.HMAC256(SECRET_KEY))
+                .withIssuer("kero-api")
+                .build()
+                .verify(token);
+        return decodedJWT.getClaim("userId").asLong();
+    }
+
     private Date genExpirationDate(long seconds) {
         return Date.from(Instant.now().plusSeconds(seconds));
     }
