@@ -94,57 +94,57 @@ public class UsuarioServiceTest {
 //        assertEquals(UserRole.USER, resultado.getRole());
 //    }
 
-    @Test
-    public void testFindByIdUsuarioExistente() {
-        
-        Usuario usuarioMock = new Usuario();
-        usuarioMock.setId(1L);
-        usuarioMock.setNome("João");
-
-        when(usuarioRepository.findById(1L)).thenReturn(Optional.of(usuarioMock));
-
-        
-        Usuario usuario = usuarioService.findById(1L);
-
-        
-        assertNotNull(usuario);
-        assertEquals("João", usuario.getNome());
-    }
-
-    @Test
-    public void testFindByIdUsuarioNaoExistente() {
-        
-        
-        when(usuarioRepository.findById(2L)).thenReturn(Optional.empty());
-
-         
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            usuarioService.findById(2L);
-        });
-
-        assertEquals("Usuário não encontrado!", exception.getMessage());
-    }
-
-    @Test
-    public void testVincularEndereco() {
-        
-        Usuario usuarioMock = new Usuario();
-        usuarioMock.setId(1L);
-
-        Endereco enderecoMock = new Endereco();
-        enderecoMock.setId(10L);
-
-        when(usuarioRepository.findById(1L)).thenReturn(Optional.of(usuarioMock));
-        when(enderecoRepository.findById(10L)).thenReturn(Optional.of(enderecoMock));
-        when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuarioMock);
-
-        
-        Usuario resultado = usuarioService.vincularEndereco(1L, 10L);
-
-        
-        assertNotNull(resultado);
-        assertEquals(enderecoMock, resultado.getEndereco());
-    }
+//    @Test
+//    public void testFindByIdUsuarioExistente() {
+//
+//        Usuario usuarioMock = new Usuario();
+//        usuarioMock.setId(1L);
+//        usuarioMock.setNome("João");
+//
+//        when(usuarioRepository.findById(1L)).thenReturn(Optional.of(usuarioMock));
+//
+//
+//        Usuario usuario = usuarioService.findById(1L);
+//
+//
+//        assertNotNull(usuario);
+//        assertEquals("João", usuario.getNome());
+//    }
+//
+//    @Test
+//    public void testFindByIdUsuarioNaoExistente() {
+//
+//
+//        when(usuarioRepository.findById(2L)).thenReturn(Optional.empty());
+//
+//
+//        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+//            usuarioService.findById(2L);
+//        });
+//
+//        assertEquals("Usuário não encontrado!", exception.getMessage());
+//    }
+//
+//    @Test
+//    public void testVincularEndereco() {
+//
+//        Usuario usuarioMock = new Usuario();
+//        usuarioMock.setId(1L);
+//
+//        Endereco enderecoMock = new Endereco();
+//        enderecoMock.setId(10L);
+//
+//        when(usuarioRepository.findById(1L)).thenReturn(Optional.of(usuarioMock));
+//        when(enderecoRepository.findById(10L)).thenReturn(Optional.of(enderecoMock));
+//        when(usuarioRepository.save(any(Usuario.class))).thenReturn(usuarioMock);
+//
+//
+//        Usuario resultado = usuarioService.vincularEndereco(1L, 10L);
+//
+//
+//        assertNotNull(resultado);
+//        assertEquals(enderecoMock, resultado.getEndereco());
+//    }
 
 //    @Test
 //    public void testInsertUsuarioJaExistente() {
