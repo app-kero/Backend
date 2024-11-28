@@ -35,6 +35,7 @@ public class JwtTokenService {
         return JWT.create()
                 .withIssuer("kero-api")
                 .withSubject(user.getEmail())
+                .withClaim("userId", user.getId())
                 .withExpiresAt(genExpirationDate(ACCESS_TOKEN_EXPIRATION))
                 .sign(Algorithm.HMAC256(SECRET_KEY));
     }
@@ -43,6 +44,7 @@ public class JwtTokenService {
         return JWT.create()
                 .withIssuer("kero-api")
                 .withSubject(user.getEmail())
+                .withClaim("userId", user.getId())
                 .withExpiresAt(genExpirationDate(REFRESH_TOKEN_EXPIRATION))
                 .sign(Algorithm.HMAC256(SECRET_KEY));
     }
