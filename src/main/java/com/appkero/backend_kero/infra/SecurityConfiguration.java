@@ -1,11 +1,10 @@
 package com.appkero.backend_kero.infra;
 
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -40,7 +39,8 @@ public class SecurityConfiguration {
             "/api/produtos/new",
             "/api/produtos/remover/{produtoId}",
             "/api/produtos/atulizar-produto/{produtoId}",
-            "/api/usuario/completar-cadastro"
+            "/api/usuario/completar-cadastro",
+            "/api/usuario/{usuarioId}"
     };
 
     public static final String[] ENDPOINTS_USER = {
@@ -48,13 +48,14 @@ public class SecurityConfiguration {
     };
 
     public static final String[] ENDPOINTS_ADMIN = {
-            "/api/usuario/all",
-            "/api/usuario/{usuarioId}"
+            "/api/usuario/all"
     };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.csrf(csrf -> csrf.disable()) // Desativa a proteção contra CSRF
+        return httpSecurity
+                .cors(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable()) // Desativa a proteção contra CSRF
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(requests -> requests
                     .requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()

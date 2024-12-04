@@ -1,6 +1,7 @@
 package com.appkero.backend_kero.controllers;
 
 import com.appkero.backend_kero.controllers.DTOs.RefreshTokenRequest;
+import com.appkero.backend_kero.domain.usuario.UsuarioResponse;
 import com.appkero.backend_kero.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,7 +39,13 @@ public class AuthenticationController {
         var accessToken = jwtTokenService.generateAccessToken(usuario);
         var refreshToken = jwtTokenService.generateRefreshToken(usuario);
 
-        return ResponseEntity.ok(new LoginResponse(accessToken, refreshToken));
+        UsuarioResponse response = UsuarioResponse.builder()
+                .id(usuario.getId())
+                .nome(usuario.getNome())
+                .email(usuario.getEmail())
+                .build();
+
+        return ResponseEntity.ok(new LoginResponse(response, accessToken, refreshToken));
     }
 
     @PostMapping("/refresh")
@@ -47,9 +54,14 @@ public class AuthenticationController {
             String email = jwtTokenService.validateToken(refreshToken.refreshToken());
 
             Usuario user = (Usuario) usuarioRepository.findByEmail(email);
+            UsuarioResponse response = UsuarioResponse.builder()
+                    .id(user.getId())
+                    .nome(user.getNome())
+                    .email(user.getEmail())
+                    .build();
 
             String newAccessToken = jwtTokenService.generateAccessToken(user);
-            return ResponseEntity.ok(new LoginResponse(newAccessToken, refreshToken.refreshToken()));
+            return ResponseEntity.ok(new LoginResponse(response, newAccessToken, refreshToken.refreshToken()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Refresh token inválido ou expirado");
         }
